@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+
+# Angular build files
+dist/
+frontend/dist/
+
+# Python virtual environment
+backend/.venv/
+backend/__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

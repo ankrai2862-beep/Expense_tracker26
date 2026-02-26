@@ -1,0 +1,46 @@
+<div class="flex h-screen bg-light-gray font-sans overflow-hidden">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white shadow-xl hidden md:flex flex-col">
+        <div class="p-6 text-xl font-bold text-blue-700 tracking-wider">
+            EXPENSE TRACKER
+        </div>
+        <div class="flex-1 px-4 py-2 space-y-2">
+            <a routerLink="/dashboard" routerLinkActive="bg-blue-50 text-blue-700"
+                class="flex items-center px-4 py-3 text-gray-500 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium transition-colors cursor-pointer">
+                <span class="mr-3">🏠</span> Dashboard
+            </a>
+            <a routerLink="/transactions" routerLinkActive="bg-blue-50 text-blue-700"
+                class="flex items-center px-4 py-3 text-gray-500 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium transition-colors cursor-pointer">
+                <span class="mr-3">💸</span> Transactions
+            </a>
+            <a routerLink="/about" routerLinkActive="bg-blue-50 text-blue-700"
+                class="flex items-center px-4 py-3 text-gray-500 hover:bg-blue-50 hover:text-blue-700 rounded-lg font-medium transition-colors cursor-pointer">
+                <span class="mr-3">ℹ️</span> About
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-auto">
+        <!-- Header -->
+        <header class="bg-white/50 backdrop-blur-md sticky top-0 z-10 p-4 flex justify-between items-center shadow-sm">
+            <div class="text-gray-500 text-sm"><span class="text-gray-800 font-semibold">Dashboard</span></div>
+            <div class="flex items-center space-x-4">
+                <div class="bg-white rounded-full p-2 shadow-sm text-sm font-bold text-gray-700 flex items-center px-4">
+                    Hi, {{ user.name }}
+                    <img [src]="'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' + user.name"
+                        class="w-8 h-8 rounded-full ml-2">
+                </div>
+                <button (click)="logout()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors shadow-sm">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Content Body -->
+        <main class="p-6 space-y-6">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

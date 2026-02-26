@@ -1,0 +1,99 @@
+<!-- Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Income -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center">
+        <div class="bg-blue-50 p-3 rounded-full text-blue-600 mr-4 text-2xl">💰</div>
+        <div>
+            <p class="text-gray-500 text-xs font-bold uppercase">Total Income</p>
+            <h3 class="text-2xl font-bold text-gray-800">${{ summary.income | number:'1.2-2' }}</h3>
+        </div>
+    </div>
+    <!-- Expenses -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center">
+        <div class="bg-pink-50 p-3 rounded-full text-pink-600 mr-4 text-2xl">💸</div>
+        <div>
+            <p class="text-gray-500 text-xs font-bold uppercase">Total Spend</p>
+            <h3 class="text-2xl font-bold text-gray-800">${{ summary.expenses | number:'1.2-2' }}</h3>
+        </div>
+    </div>
+    <!-- Balance -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center">
+        <div class="bg-green-50 p-3 rounded-full text-green-600 mr-4 text-2xl">⚖️</div>
+        <div>
+            <p class="text-gray-500 text-xs font-bold uppercase">Balance</p>
+            <h3 class="text-2xl font-bold text-gray-800">${{ summary.balance | number:'1.2-2' }}</h3>
+        </div>
+    </div>
+    <!-- Transactions -->
+    <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center">
+        <div class="bg-purple-50 p-3 rounded-full text-purple-600 mr-4 text-2xl">📊</div>
+        <div>
+            <p class="text-gray-500 text-xs font-bold uppercase">Transactions</p>
+            <h3 class="text-2xl font-bold text-gray-800">{{ transactions.length }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Area -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+    <!-- Donut Chart -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm col-span-1 lg:col-span-1">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="font-bold text-gray-800">Total Expenses</h4>
+            <!-- <div class="bg-gray-100 p-2 rounded-lg text-gray-500 cursor-pointer">...</div> -->
+        </div>
+        <div class="relative w-full h-64 flex justify-center items-center">
+            <canvas #expenseChart></canvas>
+            <div class="absolute text-center">
+                <span class="text-gray-400 text-sm">Total</span><br>
+                <span class="text-xl font-bold text-gray-800">${{ summary.expenses | number:'1.2-2' }}</span>
+            </div>
+        </div>
+        <!-- Legend (Custom) -->
+        <div class="mt-4 space-y-2">
+            <div *ngFor="let label of summary.chart_data.labels; let i = index"
+                class="flex items-center justify-between text-sm">
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full mr-2"
+                        [style.backgroundColor]="['#191970' , '#7B68EE' , '#00BFFF' , '#ADD8E6' , '#B0C4DE' , '#00CED1' , '#00FFFF'][i % 7]"></span>
+                    <span class="text-gray-600">{{ label }}</span>
+                </div>
+                <span class="font-bold text-gray-800">{{ (summary.chart_data.data[i] / (summary.expenses || 1) * 100) |
+                    number:'1.0-0' }}%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm col-span-1 lg:col-span-2">
+        <h4 class="font-bold text-gray-800 mb-4">Recent Transactions</h4>
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm whitespace-nowrap">
+                <thead>
+                    <tr class="border-b border-gray-500">
+                        <th class="p-4 font-semibold text-blue-500">Description</th>
+                        <th class="p-4 font-semibold text-blue-500">Date</th>
+                        <th class="p-4 font-semibold text-blue-500">Amount</th>
+                        <th class="p-4 font-semibold text-blue-500">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tx of transactions" class="border-b border-gray-50 hover:bg-gray-50 transition">
+                        <td class="p-4 font-bold text-gray-800">
+                            {{ tx.description || tx.category }}
+                        </td>
+                        <td class="p-4 text-gray-500">{{ tx.date | date:'shortDate' }}</td>
+                        <td class="p-4 font-bold"
+                            [ngClass]="{'text-green-500': tx.type === 'income', 'text-red-500': tx.type === 'expense'}">
+                            {{ tx.type === 'income' ? '+' : '-' }}${{ tx.amount }}
+                        </td>
+                        <td class="p-4">
+                            <span
+                                class="bg-green-100 text-green-600 py-1 px-3 rounded-full text-xs font-bold">Completed</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

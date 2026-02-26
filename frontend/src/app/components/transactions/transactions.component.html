@@ -1,0 +1,172 @@
+<div class="bg-white p-6 rounded-2xl shadow-sm">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">All Transactions</h2>
+        <div class="flex items-center space-x-3">
+            <!-- Hidden PDF file input -->
+            <input id="pdfFileInput" type="file" accept=".pdf" class="hidden" (change)="onPdfFileSelected($event)">
+
+            <!-- Upload PDF Button -->
+            <button (click)="triggerPdfUpload()" [disabled]="isUploading"
+                class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold py-2 px-4 rounded-lg transition">
+                <span *ngIf="!isUploading">📄 Upload PDF</span>
+                <span *ngIf="isUploading" class="flex items-center space-x-2">
+                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                    <span>Uploading...</span>
+                </span>
+            </button>
+
+            <!-- Add Transaction Button -->
+            <button (click)="toggleForm()"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center">
+                <span class="mr-2">+</span> Add Transaction
+            </button>
+        </div>
+    </div>
+
+    <!-- Upload Success Result Banner -->
+    <div *ngIf="uploadResult" class="mb-4 p-4 rounded-xl border flex items-start justify-between"
+        [ngClass]="uploadResult.inserted > 0 ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'">
+        <div>
+            <p class="font-bold text-gray-800">
+                <span *ngIf="uploadResult.inserted > 0">✅ PDF imported successfully!</span>
+                <span *ngIf="uploadResult.inserted === 0">⚠️ No transactions imported.</span>
+            </p>
+            <p class="text-sm text-gray-600 mt-1">
+                <span class="text-green-700 font-semibold">{{ uploadResult.inserted }} inserted</span>
+                <span *ngIf="uploadResult.skipped > 0"> · <span class="text-yellow-700 font-semibold">{{
+                        uploadResult.skipped }} skipped</span></span>
+            </p>
+            <ul *ngIf="uploadResult.errors.length > 0"
+                class="mt-2 text-xs text-red-600 list-disc list-inside space-y-1">
+                <li *ngFor="let err of uploadResult.errors">{{ err }}</li>
+            </ul>
+        </div>
+        <button (click)="dismissUploadResult()"
+            class="text-gray-400 hover:text-gray-600 ml-4 text-lg leading-none">&times;</button>
+    </div>
+
+    <!-- Upload Error Banner -->
+    <div *ngIf="uploadError"
+        class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 flex items-start justify-between">
+        <div>
+            <p class="font-bold text-red-700">❌ Upload failed</p>
+            <p class="text-sm text-red-600 mt-1">{{ uploadError }}</p>
+        </div>
+        <button (click)="dismissUploadResult()"
+            class="text-gray-400 hover:text-gray-600 ml-4 text-lg leading-none">&times;</button>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm whitespace-nowrap">
+            <thead>
+                <tr class="border-b border-gray-700 bg-gray-50">
+                    <th class="p-4 font-semibold text-gray-500">Date</th>
+                    <th class="p-4 font-semibold text-gray-500">Description</th>
+                    <th class="p-4 font-semibold text-gray-500">Category</th>
+                    <th class="p-4 font-semibold text-gray-500">Type</th>
+                    <th class="p-4 font-semibold text-gray-500">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tx of transactions" class="border-b border-gray-50 hover:bg-gray-50 transition">
+                    <td class="p-4 text-gray-500">{{ tx.date | date:'mediumDate' }}</td>
+                    <td class="p-4 font-bold text-gray-800">{{ tx.description }}</td>
+                    <td class="p-4 text-gray-600">{{ tx.category }}</td>
+                    <td class="p-4">
+                        <span
+                            [ngClass]="{'bg-green-100 text-green-700': tx.type === 'income', 'bg-red-100 text-red-700': tx.type === 'expense'}"
+                            class="px-2 py-1 rounded text-xs font-bold uppercase">
+                            {{ tx.type }}
+                        </span>
+                    </td>
+                    <td class="p-4 font-bold text-gray-800">${{ tx.amount | number:'1.2-2' }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div *ngIf="transactions.length === 0" class="p-8 text-center text-gray-500">
+            No transactions found. Start adding some!
+        </div>
+    </div>
+</div>
+
+<!-- Add Transaction Modal Overlay -->
+<div *ngIf="displayForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 overflow-hidden animate-fade-in-down">
+        <div class="bg-gray-50 px-6 py-4 flex justify-between items-center border-b">
+            <h3 class="text-lg font-bold text-gray-800">Add New Transaction</h3>
+            <button (click)="toggleForm()" class="text-gray-400 hover:text-gray-600">&times;</button>
+        </div>
+
+        <div class="p-6">
+            <form (ngSubmit)="onSubmit()">
+                <!-- Type -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" [(ngModel)]="newTx.type" name="type" value="expense"
+                                class="form-radio text-pink-600">
+                            <span class="ml-2">Expense</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" [(ngModel)]="newTx.type" name="type" value="income"
+                                class="form-radio text-green-600">
+                            <span class="ml-2">Income</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Amount -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Amount ($)</label>
+                    <input [(ngModel)]="newTx.amount" name="amount" type="number" step="0.01"
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                        placeholder="0.00" required>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                    <select [(ngModel)]="newTx.category" name="category"
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Food">Food</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Rent">Rent</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Utilities">Utilities</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Shopping">Shopping</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Transport">Transport</option>
+                        <option *ngIf="newTx.type === 'expense'" value="Entertainment">Entertainment</option>
+
+                        <option *ngIf="newTx.type === 'income'" value="Salary">Salary</option>
+                        <option *ngIf="newTx.type === 'income'" value="Freelance">Freelance</option>
+                        <option *ngIf="newTx.type === 'income'" value="Investment">Investment</option>
+                        <option *ngIf="newTx.type === 'income'" value="Gift">Gift</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                    <input [(ngModel)]="newTx.description" name="description" type="text"
+                        class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                        placeholder="e.g. Grocery shopping">
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" (click)="toggleForm()"
+                        class="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg">Cancel</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg">Save
+                        Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

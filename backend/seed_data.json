@@ -1,0 +1,60 @@
+{
+    "users": [
+        {
+            "email": "test@example.com",
+            "full_name": "Nicholas Delacruz",
+            "password": "password123"
+        }
+    ],
+    "transactions": [
+        {
+            "amount": 5000.00,
+            "category": "Salary",
+            "type": "income",
+            "date": "2023-10-01T09:00:00",
+            "description": "Monthly Salary"
+        },
+        {
+            "amount": 1200.00,
+            "category": "Mortgage",
+            "type": "expense",
+            "date": "2023-10-02T10:00:00",
+            "description": "October Mortgage"
+        },
+        {
+            "amount": 450.00,
+            "category": "Food",
+            "type": "expense",
+            "date": "2023-10-05T12:30:00",
+            "description": "Grocery run"
+        },
+        {
+            "amount": 150.00,
+            "category": "Utilities",
+            "type": "expense",
+            "date": "2023-10-10T14:45:00",
+            "description": "Electric Bill"
+        },
+        {
+            "amount": 60.00,
+            "category": "Food",
+            "type": "expense",
+            "date": "2023-10-12T19:00:00",
+            "description": "Dinner out"
+        },
+        {
+            "amount": 2000.00,
+            "category": "Freelance",
+            "type": "income",
+            "date": "2023-10-15T15:00:00",
+            "description": "Project payment"
+        },
+        {
+            "amount": 300.00,
+            "category": "Shopping",
+            "type": "expense",
+            "date": "2023-10-20T11:00:00",
+            "description": "Clothes"
+        }
+    ]
+}

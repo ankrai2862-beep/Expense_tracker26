@@ -1,0 +1,105 @@
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <!-- <div class="bg-white rounded-2xl shadow-sm p-8 mb-6">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">{{ appInfo.name }}</h1>
+        <p class="text-gray-500 text-lg">{{ appInfo.description }}</p>
+        <span class="inline-block mt-4 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-bold">
+            Version {{ appInfo.version }}
+        </span>
+    </div> -->
+
+    <div class="max-w-5xl mx-auto text-center mb-16">
+
+  <!-- App Name -->
+  <h1
+    class="text-4xl md:text-5xl font-bold tracking-tight
+           text-indigo-400 drop-shadow-md">
+    {{ appInfo.name }}
+  </h1>
+
+  
+
+  <!-- Description Card Style -->
+  <div
+    class="mt-8 bg-slate-800/70 backdrop-blur-sm
+           p-8 rounded-2xl shadow-lg
+           border border-slate-700
+           hover:shadow-indigo-500/20 transition duration-300">
+
+    <p class="text-slate-300 leading-relaxed text-base md:text-lg">
+      {{ appInfo.description }}
+    </p>
+
+
+  </div>
+
+</div>
+
+    <!-- Features Section -->
+    <!-- <div class="bg-white rounded-2xl shadow-sm p-8 mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <span class="mr-3">✨</span> Features
+        </h2>
+        <ul class="space-y-3">
+            <li *ngFor="let feature of appInfo.features" class="flex items-start">
+                <span class="text-green-500 mr-3 text-xl">✓</span>
+                <span class="text-gray-700">{{ feature }}</span>
+            </li>
+        </ul>
+    </div> -->
+
+    <div class="max-w-5xl mx-auto text-center mb-16">
+
+    <h2
+    class="text-3xl md:text-3xl font-bold tracking-tight
+           text-indigo-400 drop-shadow-md mb-4">
+    Core Features
+  </h2>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+      <div *ngFor="let feature of appInfo.features"
+           class="bg-slate-800 p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300 hover:shadow-indigo-500/30">
+
+        <h3 class="text-xl font-semibold text-indigo-400 mb-3">
+          {{ feature.title }}
+        </h3>
+
+        <p class="text-slate-300 text-sm leading-relaxed">
+          {{ feature.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+    <!-- Technology Stack -->
+    <!-- <div class="bg-white rounded-2xl shadow-sm p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <span class="mr-3">🛠️</span> Technology Stack
+        </h2>
+
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-gray-700 mb-3">Frontend</h3>
+            <div class="flex flex-wrap gap-2">
+                <span *ngFor="let tech of appInfo.technologies.frontend"
+                    class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium">
+                    {{ tech }}
+                </span>
+            </div>
+        </div>
+
+        <div>
+            <h3 class="text-lg font-bold text-gray-700 mb-3">Backend</h3>
+            <div class="flex flex-wrap gap-2">
+                <span *ngFor="let tech of appInfo.technologies.backend"
+                    class="bg-purple-50 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium">
+                    {{ tech }}
+                </span>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Footer Note -->
+    <!-- <div class="mt-6 text-center text-gray-500 text-sm">
+        <p>Built with ❤️ using modern web technologies</p>
+    </div> -->
+</div>
