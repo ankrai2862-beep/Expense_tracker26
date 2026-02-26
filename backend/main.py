@@ -5,11 +5,12 @@ from routes import router
 app = FastAPI()
 
 # Restrict CORS to the frontend origin to allow credentials
-origins = ["http://localhost:4200", "http://127.0.0.1:4200", "https://spontaneous-squirrel-c5ecff.netlify.app"]
+origins = ["http://localhost:4200", "http://127.0.0.1:4200", "https://expense-tracker-ankita26.netlify.app"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
